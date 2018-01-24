@@ -7,8 +7,8 @@ import (
 	"errors"
 )
 
-// Bit represents a single bit character - i.e '1' or '0'
-type Bit = byte
+// Bits represents a byte slice of individual bits
+type Bits []byte
 
 // FromHex creates entropy bits from a hex string
 func FromHex(input string) ([]byte, error) {
@@ -33,7 +33,7 @@ func Random(length int) ([]byte, error) {
 }
 
 // CheckSum returns a slice of bits from the given entropy
-func CheckSum(ent []byte) []Bit {
+func CheckSum(ent []byte) Bits {
 	h := sha256.New()
 	h.Write(ent)
 	cs := h.Sum(nil)
@@ -43,13 +43,13 @@ func CheckSum(ent []byte) []Bit {
 }
 
 // CheckSummed returns a bit slice of entropy with an appended check sum
-func CheckSummed(ent []byte) []Bit {
+func CheckSummed(ent []byte) Bits {
 	cs := CheckSum(ent)
 	bits := bytesToBits(ent)
 	return append(bits, cs...)
 }
 
-func bytesToBits(bytes []byte) []Bit {
+func bytesToBits(bytes []byte) Bits {
 	length := len(bytes)
 	bits := make([]byte, length*8)
 	for i := 0; i < length; i++ {
