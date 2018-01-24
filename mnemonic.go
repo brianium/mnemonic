@@ -11,7 +11,8 @@ import (
 // Mnemonic represents a collection of human readable words
 // used for HD wallet seed generation
 type Mnemonic struct {
-	Words []string
+	Words    []string
+	Language Language
 }
 
 // New returns a new Mnemonic for the given entropy and language
@@ -28,7 +29,7 @@ func New(ent []byte, lang Language) *Mnemonic {
 		}
 		words[(chunkSize+i)/11-1] = GetWord(lang, intVal)
 	}
-	m := Mnemonic{words}
+	m := Mnemonic{words, lang}
 	return &m
 }
 
@@ -45,6 +46,9 @@ func NewRandom(length int, lang Language) *Mnemonic {
 // Sentence returns a Mnemonic's word collection as a space separated
 // sentence
 func (m *Mnemonic) Sentence() string {
+	if m.Language == Japanese {
+		return strings.Join(m.Words, `　`)
+	}
 	return strings.Join(m.Words, " ")
 }
 

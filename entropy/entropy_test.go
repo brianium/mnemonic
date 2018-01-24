@@ -60,6 +60,6 @@ func TestRandom(t *testing.T) {
 		t.Errorf("Random entropy failed %s", err)
 	}
 	if len(b) != length/32 {
-		t.Errorf("Expeced byte length of %d", length/32)
+		t.Errorf("Expected byte length of %d", length/32)
 	}
 }
