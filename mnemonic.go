@@ -16,7 +16,7 @@ type Mnemonic struct {
 }
 
 // New returns a new Mnemonic for the given entropy and language
-func New(ent []byte, lang Language) *Mnemonic {
+func New(ent []byte, lang Language) (*Mnemonic, error) {
 	const chunkSize = 11
 	bits := entropy.CheckSummed(ent)
 	length := len(bits)
@@ -25,20 +25,24 @@ func New(ent []byte, lang Language) *Mnemonic {
 		stringVal := string(bits[i : chunkSize+i])
 		intVal, err := strconv.ParseInt(stringVal, 2, 64)
 		if err != nil {
-			panic(fmt.Sprintf("Could not convert %s to word index", stringVal))
+			return nil, fmt.Errorf("Could not convert %s to word index", stringVal)
 		}
-		words[(chunkSize+i)/11-1] = GetWord(lang, intVal)
+		word, err := GetWord(lang, intVal)
+		if err != nil {
+			return nil, err
+		}
+		words[(chunkSize+i)/11-1] = word
 	}
 	m := Mnemonic{words, lang}
-	return &m
+	return &m, nil
 }
 
 // NewRandom returns a new Mnemonic with random entropy of the given length
 // in bits
-func NewRandom(length int, lang Language) *Mnemonic {
+func NewRandom(length int, lang Language) (*Mnemonic, error) {
 	ent, err := entropy.Random(length)
 	if err != nil {
-		panic(fmt.Sprintf("Error generating random entropy: %s", err))
+		return nil, fmt.Errorf("Error generating random entropy: %s", err)
 	}
 	return New(ent, lang)
 }

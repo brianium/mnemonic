@@ -29,7 +29,7 @@ import (
 
 func main() {
     // generate a random Mnemonic in English with 256 bits of entropy
-    m := mnemonic.NewRandom(256, mnemonic.English)
+    m, _ := mnemonic.NewRandom(256, mnemonic.English)
 
     // print the Mnemonic as a sentence
     fmt.Println(m.Sentence())
@@ -63,19 +63,19 @@ import (
 
 func main() {
     // generate some entropy from a hex string
-    ent := entropy.FromHex("8197a4a47f0425faeaa69deebc05ca29c0a5b5cc76ceacc0")
+    ent, _ := entropy.FromHex("8197a4a47f0425faeaa69deebc05ca29c0a5b5cc76ceacc0")
     
     // generate a Mnemonic in Japanese with the generated entropy
-    jp := mnemonic.New(ent, mnemonic.Japanese)
+    jp, _ := mnemonic.New(ent, mnemonic.Japanese)
 
     // print the Mnemonic as a sentence
     fmt.Println(jp.Sentence())
 
     // generate some random 256 bit entropy
-    rnd := entropy.Random(256)
+    rnd, _ := entropy.Random(256)
     
     // generate a Mnemonic in Spanish with the generated entropy
-    sp := mnemonic.New(rnd, mnemonic.Spanish)
+    sp, _ := mnemonic.New(rnd, mnemonic.Spanish)
 
     // print the Mnemonic as a sentence
     fmt.Println(sp.Sentence())

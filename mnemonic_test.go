@@ -16,7 +16,10 @@ func TestEnglishMnemonics(t *testing.T) {
 		if err != nil {
 			t.Errorf("Failed to generate entropy from hex %s", inputEntropy)
 		}
-		mnem := New(ent, English)
+		mnem, err := New(ent, English)
+		if err != nil {
+			t.Errorf("\nError generating mnemonic %s", err)
+		}
 
 		actualSentence := mnem.Sentence()
 		if actualSentence != sentence {
@@ -39,7 +42,7 @@ func BenchmarkRandomEnglishMnemonicCreation(b *testing.B) {
 
 func BenchmarkRandomEnglishMnemonicCreationWithSeed(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		mnem := NewRandom(256, English)
+		mnem, _ := NewRandom(256, English)
 		mnem.GenerateSeed("TREZOR")
 	}
 }
